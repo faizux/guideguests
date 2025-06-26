@@ -81,6 +81,11 @@
         animation: heroFadeIn 1.5s ease-out;
         transform: translateY(0);
         transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        cursor: grab;
+      }
+
+      #hero:active {
+        cursor: grabbing;
       }
 
       #hero.slide-up {
@@ -1100,7 +1105,7 @@
         <button class="hero-start-btn" onclick="showGuide()">
           <div class="start-button-container">
             <div class="start-button-bg"></div>
-            <div class="start-button-circle">Start</div>
+            <div class="start-button-circle">CLICK</div>
             <div class="start-arrows">
               <div class="arrow-down"></div>
               <div class="arrow-down"></div>
@@ -1875,6 +1880,158 @@
             }
           }
         }, 200);
+      });
+
+      // Add scroll/swipe up functionality to hero section
+      function addHeroScrollSupport() {
+        const hero = document.getElementById("hero");
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+        let scrollAccumulator = 0;
+
+        // Touch events for mobile swipe up
+        hero.addEventListener(
+          "touchstart",
+          (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            scrollAccumulator = 0;
+          },
+          { passive: true }
+        );
+
+        hero.addEventListener(
+          "touchmove",
+          (e) => {
+            if (!isDragging) return;
+
+            currentY = e.touches[0].clientY;
+            const deltaY = startY - currentY; // Positive when swiping up
+
+            // If swiping up more than 50px, trigger guide
+            if (deltaY > 50) {
+              isDragging = false;
+              showGuide();
+            }
+          },
+          { passive: true }
+        );
+
+        hero.addEventListener(
+          "touchend",
+          () => {
+            isDragging = false;
+            scrollAccumulator = 0;
+          },
+          { passive: true }
+        );
+
+        // Mouse wheel events for desktop scroll up
+        hero.addEventListener(
+          "wheel",
+          (e) => {
+            // Prevent default scroll behavior
+            e.preventDefault();
+
+            // Accumulate scroll delta (negative when scrolling up)
+            scrollAccumulator += e.deltaY;
+
+            // If scrolled up enough, trigger guide
+            if (scrollAccumulator < -100) {
+              scrollAccumulator = 0;
+              showGuide();
+            }
+
+            // Reset accumulator if scrolling down or no activity
+            if (e.deltaY > 0) {
+              scrollAccumulator = 0;
+            }
+          },
+          { passive: false }
+        );
+
+        // Mouse drag events for desktop drag up
+        let mouseStartY = 0;
+        let mouseCurrentY = 0;
+        let isMouseDragging = false;
+
+        hero.addEventListener("mousedown", (e) => {
+          mouseStartY = e.clientY;
+          isMouseDragging = true;
+          hero.style.cursor = "grabbing";
+        });
+
+        hero.addEventListener("mousemove", (e) => {
+          if (!isMouseDragging) return;
+
+          mouseCurrentY = e.clientY;
+          const deltaY = mouseStartY - mouseCurrentY; // Positive when dragging up
+
+          // If dragging up more than 50px, trigger guide
+          if (deltaY > 50) {
+            isMouseDragging = false;
+            hero.style.cursor = "default";
+            showGuide();
+          }
+        });
+
+        hero.addEventListener("mouseup", () => {
+          isMouseDragging = false;
+          hero.style.cursor = "default";
+        });
+
+        hero.addEventListener("mouseleave", () => {
+          isMouseDragging = false;
+          hero.style.cursor = "default";
+        });
+
+        // Keyboard support (Arrow Up, Space, Enter)
+        document.addEventListener("keydown", (e) => {
+          // Only trigger if hero is visible and no popups are open
+          const heroVisible = !hero.classList.contains("slide-up");
+          const noPopupsOpen =
+            !document.querySelector("#checkin-popup.show") &&
+            !document.querySelector("#host-popup.show");
+
+          if (heroVisible && noPopupsOpen) {
+            if (e.key === "ArrowUp" || e.key === " " || e.key === "Enter") {
+              e.preventDefault();
+              showGuide();
+            }
+          }
+        });
+      }
+
+      // Initialize hero scroll support when page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        addHeroScrollSupport();
+
+        // Existing mobile navigation code...
+        if (window.innerWidth <= 600) {
+          const bottomNav = document.querySelector(".bottom-nav");
+          if (bottomNav) {
+            // Force visibility
+            bottomNav.style.display = "flex";
+            bottomNav.style.visibility = "visible";
+            bottomNav.style.opacity = "1";
+            bottomNav.style.position = "fixed";
+            bottomNav.style.bottom = "0";
+            bottomNav.style.left = "0";
+            bottomNav.style.right = "0";
+            bottomNav.style.zIndex = "999999";
+            bottomNav.style.width = "100vw";
+            bottomNav.style.height = "60px";
+            bottomNav.style.backgroundColor = "#ffffff";
+            bottomNav.style.borderTop = "1.5px solid #e0e0e0";
+            bottomNav.style.boxShadow = "0 -2px 10px rgba(0, 0, 0, 0.1)";
+
+            // Ensure it's always on top
+            setTimeout(() => {
+              bottomNav.style.transform = "translateZ(0)";
+            }, 100);
+          }
+        }
       });
     </script>
   </body>
