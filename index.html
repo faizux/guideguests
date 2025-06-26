@@ -19,6 +19,7 @@
         --bg: #f7f7f7;
         --white: #fff;
         --border: #e0e0e0;
+        --logo-url: url("https://goguidebook.com/guide-10436/wp-content/uploads/sites/7/2022/08/music-fest-300x205.png");
       }
       * {
         box-sizing: border-box;
@@ -239,42 +240,91 @@
         flex-direction: column;
         align-items: center;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+
         animation: fadeInUp 1s ease-out 0.3s both;
+        text-align: center;
       }
       .hero-logo {
-        width: 64px;
+        width: auto;
         height: 64px;
+        max-width: 200px;
         margin-bottom: 1rem;
         animation: bounceIn 1.2s ease-out 0.6s both;
+        object-fit: contain;
       }
       .hero-title {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.8rem;
         text-align: center;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
         animation: slideInFromLeft 0.8s ease-out 0.9s both;
       }
-      .hero-host,
-      .hero-contact,
-      .hero-address {
-        font-size: 1rem;
-        margin-bottom: 0.3rem;
-        text-align: center;
-      }
       .hero-host {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
         animation: slideInFromRight 0.8s ease-out 1.1s both;
       }
-      .hero-contact:nth-of-type(4) {
+
+      .hero-info-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-bottom: 1.8rem;
+        width: 100%;
+      }
+
+      .hero-contact {
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .hero-contact:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .hero-contact:nth-of-type(1) {
         animation: slideInFromLeft 0.8s ease-out 1.3s both;
       }
-      .hero-contact:nth-of-type(5) {
+      .hero-contact:nth-of-type(2) {
         animation: slideInFromRight 0.8s ease-out 1.5s both;
       }
       .hero-contact i {
-        margin-right: 0.5em;
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
       }
       .hero-address {
-        margin-bottom: 1.2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.85);
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        line-height: 1.4;
         animation: slideInFromLeft 0.8s ease-out 1.7s both;
       }
       .hero-start-btn {
@@ -440,7 +490,28 @@
           padding: 1.5rem 0.5rem;
         }
         .hero-title {
-          font-size: 1.3rem;
+          font-size: 2rem;
+          line-height: 1.1;
+          margin-bottom: 0.6rem;
+        }
+        .hero-host {
+          font-size: 1.1rem;
+          margin-bottom: 1.2rem;
+        }
+        .hero-info-section {
+          gap: 0.6rem;
+          margin-bottom: 1.4rem;
+        }
+        .hero-contact {
+          font-size: 0.9rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 12px;
+        }
+        .hero-address {
+          font-size: 0.9rem;
+          padding: 0.8rem 1.2rem;
+          border-radius: 16px;
+          line-height: 1.3;
         }
 
         /* Ensure proper viewport on Samsung and other Android devices */
@@ -455,8 +526,9 @@
         }
 
         .topbar-logo {
-          width: 40px;
+          width: auto;
           height: 40px;
+          max-width: 120px;
         }
       }
       #main-guide {
@@ -503,8 +575,10 @@
         gap: 0.7em;
       }
       .topbar-logo {
-        width: 48px;
+        width: auto;
         height: 48px;
+        max-width: 150px;
+        object-fit: contain;
       }
       .topbar-search {
         background: #f1f1f1;
@@ -1087,20 +1161,27 @@
     <div id="hero">
       <div class="hero-overlay">
         <img
-          src="https://goguidebook.com/guide-10436/wp-content/uploads/sites/7/2022/08/music-fest-300x205.png "
+          src="https://goguidebook.com/guide-10436/wp-content/uploads/sites/7/2022/08/music-fest-300x205.png"
           alt="Logo"
           class="hero-logo"
         />
-        <div class="hero-title">Sunset Lake House</div>
-        <div class="hero-host">Host: Jane Doe</div>
-        <div class="hero-contact">
-          <i class="fas fa-phone"></i> +1 234 567 8901
+        <h1 class="hero-title">Sunset Lake House</h1>
+        <p class="hero-host">Hosted by Jane Doe</p>
+
+        <div class="hero-info-section">
+          <div class="hero-contact">
+            <i class="fas fa-phone"></i>
+            <span>+1 234 567 8901</span>
+          </div>
+          <div class="hero-contact">
+            <i class="fas fa-envelope"></i>
+            <span>jane.doe@email.com</span>
+          </div>
         </div>
-        <div class="hero-contact">
-          <i class="fas fa-envelope"></i> jane.doe@email.com
-        </div>
+
         <div class="hero-address">
-          <i class="fas fa-map-marker-alt"></i> 123 Lakeview Dr, Springfield
+          <i class="fas fa-map-marker-alt"></i>
+          123 Lakeview Dr, Springfield
         </div>
         <button class="hero-start-btn" onclick="showGuide()">
           <div class="start-button-container">
@@ -1118,7 +1199,7 @@
       <div class="sticky-topbar">
         <div class="topbar-left">
           <img
-            src="https://goguidebook.com/guide-10436/wp-content/uploads/sites/7/2022/08/music-fest-300x205.png "
+            src="https://goguidebook.com/guide-10436/wp-content/uploads/sites/7/2022/08/music-fest-300x205.png"
             alt="Logo"
             class="topbar-logo"
           />
@@ -2003,8 +2084,22 @@
         });
       }
 
+      // Centralized logo management
+      const LOGO_URL =
+        "https://goguidebook.com/guide-10436/wp-content/uploads/sites/7/2022/08/music-fest-300x205.png";
+
+      function initializeLogos() {
+        // Update all logo sources from central location
+        document
+          .querySelectorAll(".hero-logo, .topbar-logo")
+          .forEach((logo) => {
+            logo.src = LOGO_URL;
+          });
+      }
+
       // Initialize hero scroll support when page loads
       document.addEventListener("DOMContentLoaded", () => {
+        initializeLogos();
         addHeroScrollSupport();
 
         // Existing mobile navigation code...
