@@ -772,7 +772,6 @@
           transform: translateY(100%);
           transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           position: relative;
-          overscroll-behavior: none;
         }
         .popup-container.animate-in {
           transform: translateY(0);
@@ -787,21 +786,13 @@
           height: 4px;
           background: #ddd;
           border-radius: 2px;
-          z-index: 10;
         }
         .popup-header {
           padding: 1.5rem 1rem 1rem 1rem;
           border-bottom: 1px solid var(--border);
-          position: sticky;
-          top: 0;
-          background: var(--bg);
-          z-index: 5;
         }
         .popup-content {
           padding-bottom: 2rem;
-          overscroll-behavior: contain;
-          -webkit-overflow-scrolling: touch;
-          max-height: calc(90vh - 120px);
         }
         .back-button {
           width: 40px;
@@ -965,10 +956,6 @@
         overflow-y: auto;
         opacity: 0;
         transform: translateY(20px);
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
-        position: relative;
-        padding: 0;
       }
       .popup-content.animate-in {
         animation: popupContentSlideIn 0.6s ease-out 0.4s forwards;
@@ -1646,20 +1633,11 @@
         const header = popup.querySelector(".popup-header");
         const content = popup.querySelector(".popup-content");
 
-        // Restore body scroll
-        document.body.style.overflow = "";
-        document.body.style.position = "";
-        document.body.style.width = "";
-
         // Remove animation classes
         popup.classList.remove("show");
         container.classList.remove("animate-in");
         header.classList.remove("animate-in");
         content.classList.remove("animate-in");
-
-        // Reset transform
-        container.style.transform = "";
-        container.style.transition = "";
 
         // Hide popup after transition
         setTimeout(() => {
@@ -1702,20 +1680,11 @@
         const header = popup.querySelector(".popup-header");
         const content = popup.querySelector(".popup-content");
 
-        // Restore body scroll
-        document.body.style.overflow = "";
-        document.body.style.position = "";
-        document.body.style.width = "";
-
         // Remove animation classes
         popup.classList.remove("show");
         container.classList.remove("animate-in");
         header.classList.remove("animate-in");
         content.classList.remove("animate-in");
-
-        // Reset transform
-        container.style.transform = "";
-        container.style.transition = "";
 
         // Hide popup after transition
         setTimeout(() => {
@@ -1727,81 +1696,44 @@
         let startY = 0;
         let currentY = 0;
         let isDragging = false;
-        let isHeader = false;
 
         // Check if mobile
         const isMobile = window.innerWidth <= 768;
         if (!isMobile) return;
 
-        // Prevent body scroll when popup is open
-        document.body.style.overflow = "hidden";
-        document.body.style.position = "fixed";
-        document.body.style.width = "100%";
-
-        // Get popup content area for scroll detection
-        const popupContent = container.querySelector(".popup-content");
-        const popupHeader = container.querySelector(".popup-header");
-
-        // Touch start handler
-        function handleTouchStart(e) {
+        container.addEventListener("touchstart", (e) => {
           startY = e.touches[0].clientY;
-          currentY = startY;
           isDragging = true;
-
-          // Check if touch started on header or at top of content
-          const rect = container.getBoundingClientRect();
-          const touchY = e.touches[0].clientY - rect.top;
-          isHeader = touchY < 80; // Header area
-
-          // If touching content area, check scroll position
-          if (popupContent && !isHeader) {
-            const isAtTop = popupContent.scrollTop <= 5;
-            if (!isAtTop) {
-              isDragging = false; // Allow normal scrolling
-              return;
-            }
-          }
-
           container.style.transition = "none";
-          e.preventDefault(); // Prevent pull-to-refresh
-        }
+        });
 
-        // Touch move handler
-        function handleTouchMove(e) {
+        container.addEventListener("touchmove", (e) => {
           if (!isDragging) return;
 
           currentY = e.touches[0].clientY;
           const deltaY = currentY - startY;
 
-          // Only allow downward swipes for closing
+          // Only allow downward swipes
           if (deltaY > 0) {
-            e.preventDefault(); // Prevent pull-to-refresh
-            e.stopPropagation();
-
-            const translateY = Math.min(deltaY * 0.8, 200); // Damping effect
+            const translateY = Math.min(deltaY, 200);
             container.style.transform = `translateY(${translateY}px)`;
 
             // Adjust background opacity based on swipe distance
-            const opacity = Math.max(0.3 - deltaY / 800, 0.05);
+            const opacity = Math.max(0.3 - deltaY / 1000, 0.1);
             popup.style.background = `rgba(0, 0, 0, ${opacity})`;
-          } else {
-            // Upward swipes - prevent but don't move
-            e.preventDefault();
           }
-        }
+        });
 
-        // Touch end handler
-        function handleTouchEnd(e) {
+        container.addEventListener("touchend", (e) => {
           if (!isDragging) return;
           isDragging = false;
 
           const deltaY = currentY - startY;
           container.style.transition =
-            "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            "transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
 
-          // If swiped down more than 80px, close popup
-          if (deltaY > 80) {
-            // Close popup
+          // If swiped down more than 100px, close popup
+          if (deltaY > 100) {
             if (popup.id === "checkin-popup") {
               closeCheckinPopup();
             } else {
@@ -1812,29 +1744,7 @@
             container.style.transform = "translateY(0)";
             popup.style.background = "rgba(0, 0, 0, 0.3)";
           }
-        }
-
-        // Add event listeners with passive: false to prevent pull-to-refresh
-        container.addEventListener("touchstart", handleTouchStart, {
-          passive: false,
         });
-        container.addEventListener("touchmove", handleTouchMove, {
-          passive: false,
-        });
-        container.addEventListener("touchend", handleTouchEnd, {
-          passive: false,
-        });
-
-        // Prevent scroll on popup backdrop
-        popup.addEventListener(
-          "touchmove",
-          (e) => {
-            if (e.target === popup) {
-              e.preventDefault();
-            }
-          },
-          { passive: false }
-        );
 
         // Close on background tap
         popup.addEventListener("click", (e) => {
