@@ -275,14 +275,14 @@
 
       .start-button-circle {
         position: relative;
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         background: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1rem;
+        font-size: 0.85rem;
         font-weight: 700;
         color: var(--secondary);
         z-index: 2;
@@ -290,6 +290,7 @@
         transition: all 0.3s ease;
         text-transform: uppercase;
         letter-spacing: 1px;
+        margin-top: 10px;
       }
 
       .start-arrows {
@@ -330,6 +331,16 @@
         box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
       }
 
+      .hero-start-btn:active .start-button-circle {
+        transform: scale(0.95);
+        transition: transform 0.1s ease-out;
+      }
+
+      .hero-start-btn:active .start-button-bg {
+        transform: scale(0.98);
+        transition: transform 0.1s ease-out;
+      }
+
       @keyframes arrowBounce {
         0%,
         100% {
@@ -339,6 +350,42 @@
         50% {
           opacity: 1;
           transform: translateY(10px);
+        }
+      }
+
+      @keyframes ripple {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      @keyframes successPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+          color: #ff5a5f;
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes buttonPress {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+        100% {
+          transform: scale(1);
         }
       }
       @media (max-width: 600px) {
@@ -429,9 +476,49 @@
       .icon-box.animate-in {
         animation: slideInFromBottom 0.6s ease-out forwards;
       }
+      .icon-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .icon-box::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: radial-gradient(
+          circle,
+          rgba(255, 91, 95, 0.2) 0%,
+          rgba(255, 91, 95, 0) 70%
+        );
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .icon-box:active::before {
+        width: 300px;
+        height: 300px;
+        opacity: 1;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
       .icon-box:hover {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         transform: translateY(-5px);
+      }
+
+      .icon-box:active {
+        transform: translateY(-2px) scale(0.98);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        transition: all 0.1s ease-out;
       }
       .icon-box i {
         font-size: 2em;
@@ -454,35 +541,74 @@
         }
       }
       .bottom-nav {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: var(--white);
-        border-top: 1.5px solid var(--border);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        height: 60px;
-        z-index: 30;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        background: #ffffff !important;
+        border-top: 1.5px solid #e0e0e0 !important;
+        display: flex !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        height: 60px !important;
+        z-index: 9999 !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
       }
       .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: var(--secondary);
-        font-size: 0.9em;
-        text-decoration: none;
-        transition: color 0.2s;
-        cursor: pointer;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        color: #484848 !important;
+        font-size: 0.9em !important;
+        text-decoration: none !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+        padding: 8px !important;
+        min-width: 60px !important;
+        border-radius: 12px !important;
+        position: relative !important;
+        overflow: hidden !important;
+      }
+
+      .nav-item::before {
+        content: "" !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        width: 0 !important;
+        height: 0 !important;
+        background: radial-gradient(
+          circle,
+          rgba(255, 91, 95, 0.15) 0%,
+          rgba(255, 91, 95, 0) 70%
+        ) !important;
+        border-radius: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
+      }
+
+      .nav-item:active::before {
+        width: 80px !important;
+        height: 80px !important;
+        opacity: 1 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      }
+
+      .nav-item:active {
+        transform: scale(0.95) !important;
+        background: rgba(255, 91, 95, 0.05) !important;
+        transition: all 0.1s ease-out !important;
       }
       .nav-item.active,
       .nav-item:hover {
-        color: var(--primary);
+        color: #ff5a5f !important;
       }
       .nav-item i {
-        font-size: 1.5em;
-        margin-bottom: 0.1em;
+        font-size: 1.5em !important;
+        margin-bottom: 0.1em !important;
       }
 
       /* Check-in Popup Styles */
@@ -603,11 +729,47 @@
         height: 48px;
         color: #0d141c;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         border-radius: 12px;
+        position: relative;
+        overflow: hidden;
       }
+
+      .back-button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: radial-gradient(
+          circle,
+          rgba(0, 0, 0, 0.1) 0%,
+          rgba(0, 0, 0, 0) 70%
+        );
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        opacity: 0;
+      }
+
       .back-button:hover {
         background: rgba(0, 0, 0, 0.05);
+        transform: scale(1.05);
+      }
+
+      .back-button:active {
+        transform: scale(0.95);
+        background: rgba(0, 0, 0, 0.1);
+        transition: all 0.1s ease-out;
+      }
+
+      .back-button:active::before {
+        width: 60px;
+        height: 60px;
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .popup-title {
         color: #0d141c;
@@ -1162,6 +1324,47 @@
           setTimeout(() => {
             box.classList.add("animate-in");
           }, 800 + index * 100);
+
+          // Add enhanced click interactions
+          box.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Create visual ripple effect
+            const ripple = document.createElement("div");
+            const rect = box.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+
+            ripple.style.width = ripple.style.height = size + "px";
+            ripple.style.left = e.clientX - rect.left - size / 2 + "px";
+            ripple.style.top = e.clientY - rect.top - size / 2 + "px";
+            ripple.style.position = "absolute";
+            ripple.style.borderRadius = "50%";
+            ripple.style.background = "rgba(255, 91, 95, 0.3)";
+            ripple.style.transform = "scale(0)";
+            ripple.style.animation = "ripple 0.6s linear";
+            ripple.style.pointerEvents = "none";
+
+            box.appendChild(ripple);
+
+            // Add subtle vibration on mobile
+            if (navigator.vibrate) {
+              navigator.vibrate(10);
+            }
+
+            // Clean up ripple
+            setTimeout(() => {
+              ripple.remove();
+            }, 600);
+
+            // Add success pulse to icon
+            const icon = box.querySelector("i");
+            if (icon) {
+              icon.style.animation = "successPulse 0.4s ease-out";
+              setTimeout(() => {
+                icon.style.animation = "";
+              }, 400);
+            }
+          });
         });
       }
 
@@ -1201,6 +1404,12 @@
           .querySelectorAll(".nav-item")
           .forEach((item) => item.classList.remove("active"));
         event.target.classList.add("active");
+
+        // Add button press animation
+        event.target.style.animation = "buttonPress 0.2s ease-out";
+        setTimeout(() => {
+          event.target.style.animation = "";
+        }, 200);
       }
 
       function goToGuide() {
@@ -1209,6 +1418,12 @@
           .querySelectorAll(".nav-item")
           .forEach((item) => item.classList.remove("active"));
         event.target.classList.add("active");
+
+        // Add button press animation
+        event.target.style.animation = "buttonPress 0.2s ease-out";
+        setTimeout(() => {
+          event.target.style.animation = "";
+        }, 200);
       }
 
       function showCheckinPopup() {
@@ -1269,6 +1484,14 @@
           header.classList.add("animate-in");
           content.classList.add("animate-in");
         }, 50);
+
+        // Add button press animation to the triggering nav item
+        if (event && event.target) {
+          event.target.style.animation = "buttonPress 0.2s ease-out";
+          setTimeout(() => {
+            event.target.style.animation = "";
+          }, 200);
+        }
       }
 
       function closeHostPopup() {
