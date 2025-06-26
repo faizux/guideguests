@@ -756,6 +756,8 @@
           padding: 0;
           align-items: flex-end;
           justify-content: center;
+          position: fixed;
+          overflow: hidden;
         }
         #checkin-popup.show,
         #host-popup.show {
@@ -771,7 +773,13 @@
           width: 100%;
           transform: translateY(100%);
           transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          position: relative;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
         }
         .popup-container.animate-in {
           transform: translateY(0);
@@ -786,13 +794,24 @@
           height: 4px;
           background: #ddd;
           border-radius: 2px;
+          z-index: 10;
         }
         .popup-header {
           padding: 1.5rem 1rem 1rem 1rem;
           border-bottom: 1px solid var(--border);
+          flex-shrink: 0;
+          background: var(--bg);
+          position: sticky;
+          top: 0;
+          z-index: 5;
         }
         .popup-content {
           padding-bottom: 2rem;
+          flex: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
         }
         .back-button {
           width: 40px;
@@ -1696,55 +1715,105 @@
         let startY = 0;
         let currentY = 0;
         let isDragging = false;
+        let isScrolling = false;
 
         // Check if mobile
         const isMobile = window.innerWidth <= 768;
         if (!isMobile) return;
 
-        container.addEventListener("touchstart", (e) => {
-          startY = e.touches[0].clientY;
-          isDragging = true;
-          container.style.transition = "none";
-        });
+        const popupContent = container.querySelector(".popup-content");
+        const popupHeader = container.querySelector(".popup-header");
 
-        container.addEventListener("touchmove", (e) => {
-          if (!isDragging) return;
+        // Only allow drag-to-close from header area, not content
+        popupHeader.addEventListener(
+          "touchstart",
+          (e) => {
+            if (e.target.closest(".back-button")) return; // Don't interfere with back button
 
-          currentY = e.touches[0].clientY;
-          const deltaY = currentY - startY;
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            isScrolling = false;
+            container.style.transition = "none";
+          },
+          { passive: true }
+        );
 
-          // Only allow downward swipes
-          if (deltaY > 0) {
-            const translateY = Math.min(deltaY, 200);
-            container.style.transform = `translateY(${translateY}px)`;
+        popupHeader.addEventListener(
+          "touchmove",
+          (e) => {
+            if (!isDragging) return;
 
-            // Adjust background opacity based on swipe distance
-            const opacity = Math.max(0.3 - deltaY / 1000, 0.1);
-            popup.style.background = `rgba(0, 0, 0, ${opacity})`;
-          }
-        });
+            currentY = e.touches[0].clientY;
+            const deltaY = currentY - startY;
 
-        container.addEventListener("touchend", (e) => {
-          if (!isDragging) return;
-          isDragging = false;
+            // Only allow downward swipes
+            if (deltaY > 0) {
+              e.preventDefault(); // Prevent scrolling
+              const translateY = Math.min(deltaY, 200);
+              container.style.transform = `translateY(${translateY}px)`;
 
-          const deltaY = currentY - startY;
-          container.style.transition =
-            "transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-
-          // If swiped down more than 100px, close popup
-          if (deltaY > 100) {
-            if (popup.id === "checkin-popup") {
-              closeCheckinPopup();
-            } else {
-              closeHostPopup();
+              // Adjust background opacity based on swipe distance
+              const opacity = Math.max(0.3 - deltaY / 1000, 0.1);
+              popup.style.background = `rgba(0, 0, 0, ${opacity})`;
             }
-          } else {
-            // Snap back to position
-            container.style.transform = "translateY(0)";
-            popup.style.background = "rgba(0, 0, 0, 0.3)";
-          }
-        });
+          },
+          { passive: false }
+        );
+
+        popupHeader.addEventListener(
+          "touchend",
+          (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const deltaY = currentY - startY;
+            container.style.transition =
+              "transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+
+            // If swiped down more than 100px, close popup
+            if (deltaY > 100) {
+              if (popup.id === "checkin-popup") {
+                closeCheckinPopup();
+              } else {
+                closeHostPopup();
+              }
+            } else {
+              // Snap back to position
+              container.style.transform = "translateY(0)";
+              popup.style.background = "rgba(0, 0, 0, 0.3)";
+            }
+          },
+          { passive: true }
+        );
+
+        // Prevent popup movement when scrolling content
+        popupContent.addEventListener(
+          "touchstart",
+          (e) => {
+            isScrolling = true;
+            isDragging = false;
+          },
+          { passive: true }
+        );
+
+        popupContent.addEventListener(
+          "touchmove",
+          (e) => {
+            if (isScrolling) {
+              // Allow normal scrolling, prevent popup movement
+              e.stopPropagation();
+            }
+          },
+          { passive: true }
+        );
+
+        popupContent.addEventListener(
+          "touchend",
+          (e) => {
+            isScrolling = false;
+          },
+          { passive: true }
+        );
 
         // Close on background tap
         popup.addEventListener("click", (e) => {
