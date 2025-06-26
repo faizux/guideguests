@@ -590,7 +590,8 @@
         -webkit-tap-highlight-color: transparent !important;
         outline: none !important;
       }
-      .icon-grid {
+      .icon-grid,
+      .map-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.2em;
@@ -599,6 +600,114 @@
         overflow-y: auto;
         height: calc(100vh - 140px);
         box-sizing: border-box;
+      }
+
+      .map-container {
+        display: none;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        gap: 1.5em;
+        padding: 1.5em 1em 5em 1em;
+      }
+
+      .map-header {
+        text-align: center;
+        padding: 0 1em;
+      }
+
+      .map-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+      }
+
+      .map-header p {
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      .map-view {
+        width: 100%;
+        height: 300px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .map-places {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+      }
+
+      .place-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: var(--white);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .place-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .place-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+      }
+
+      .place-icon i {
+        font-size: 1.2rem;
+        color: white;
+      }
+
+      .place-info {
+        flex: 1;
+      }
+
+      .place-info h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--secondary);
+        margin-bottom: 0.2rem;
+      }
+
+      .place-info p {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.3rem;
+      }
+
+      .place-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .place-rating i {
+        color: #ffd700;
+        font-size: 0.9rem;
+      }
+
+      .place-rating span {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--secondary);
       }
       .icon-box {
         background: var(--white);
@@ -1092,9 +1201,32 @@
         }
 
         @media (max-width: 600px) {
-          .icon-grid {
+          .icon-grid,
+          .map-container {
             height: calc(100dvh - 130px) !important;
             max-height: calc(100dvh - 130px) !important;
+          }
+
+          .map-view {
+            height: 250px;
+          }
+
+          .place-item {
+            padding: 0.8rem;
+          }
+
+          .place-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 0.8rem;
+          }
+
+          .place-info h3 {
+            font-size: 1rem;
+          }
+
+          .place-info p {
+            font-size: 0.85rem;
           }
         }
       }
@@ -1266,12 +1398,89 @@
           <div class="icon-label">More Info</div>
         </div>
       </div>
+
+      <div class="map-container" style="display: none">
+        <div class="map-header">
+          <h2>Nearby Places</h2>
+          <p>Explore attractions and amenities around your stay</p>
+        </div>
+        <div class="map-view">
+          <iframe
+            id="property-map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3048.4254!2d-106.8175!3d39.1911!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDExJzI4LjAiTiAxMDbCsDQ5JzAzLjAiVw!5e0!3m2!1sen!2sus!4v1234567890"
+            width="100%"
+            height="400"
+            style="border: 0; border-radius: 12px"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          >
+          </iframe>
+        </div>
+        <div class="map-places">
+          <div class="place-item">
+            <div class="place-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div class="place-info">
+              <h3>Mountain Bistro</h3>
+              <p>Fine dining • 0.3 miles</p>
+              <div class="place-rating">
+                <i class="fas fa-star"></i>
+                <span>4.8</span>
+              </div>
+            </div>
+          </div>
+          <div class="place-item">
+            <div class="place-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="place-info">
+              <h3>Aspen Market</h3>
+              <p>Grocery store • 0.5 miles</p>
+              <div class="place-rating">
+                <i class="fas fa-star"></i>
+                <span>4.5</span>
+              </div>
+            </div>
+          </div>
+          <div class="place-item">
+            <div class="place-icon">
+              <i class="fas fa-mountain"></i>
+            </div>
+            <div class="place-info">
+              <h3>Ski Resort</h3>
+              <p>Recreation • 1.2 miles</p>
+              <div class="place-rating">
+                <i class="fas fa-star"></i>
+                <span>4.9</span>
+              </div>
+            </div>
+          </div>
+          <div class="place-item">
+            <div class="place-icon">
+              <i class="fas fa-coffee"></i>
+            </div>
+            <div class="place-info">
+              <h3>Alpine Coffee</h3>
+              <p>Café • 0.4 miles</p>
+              <div class="place-rating">
+                <i class="fas fa-star"></i>
+                <span>4.7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="bottom-nav">
         <div class="nav-item active" onclick="goHome()">
           <i class="fas fa-home"></i>Home
         </div>
         <div class="nav-item" onclick="goToGuide()">
           <i class="fas fa-book"></i>Guide
+        </div>
+        <div class="nav-item" onclick="showMaps()">
+          <i class="fas fa-map-marked-alt"></i>Maps
         </div>
         <div class="nav-item" onclick="showHostPopup()">
           <i class="fas fa-user"></i>About Host
@@ -1676,10 +1885,16 @@
         const guide = document.getElementById("main-guide");
         const topbar = document.querySelector(".sticky-topbar");
         const iconBoxes = document.querySelectorAll(".icon-box");
+        const iconGrid = document.querySelector(".icon-grid");
+        const mapContainer = document.querySelector(".map-container");
 
         // Reset animations
         topbar.classList.remove("animate-in");
         iconBoxes.forEach((box) => box.classList.remove("animate-in"));
+
+        // Reset to icon grid view
+        iconGrid.style.display = "grid";
+        mapContainer.style.display = "none";
 
         // Start slide transition
         hero.classList.remove("slide-up");
@@ -1716,7 +1931,51 @@
       }
 
       function goToGuide() {
-        // Already on guide page, just update active state
+        // Show guide grid and hide map
+        const iconGrid = document.querySelector(".icon-grid");
+        const mapContainer = document.querySelector(".map-container");
+
+        iconGrid.style.display = "grid";
+        mapContainer.style.display = "none";
+
+        // Update active state
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((item) => item.classList.remove("active"));
+        event.target.classList.add("active");
+
+        // Add button press animation
+        event.target.style.animation = "buttonPress 0.2s ease-out";
+        setTimeout(() => {
+          event.target.style.animation = "";
+        }, 200);
+      }
+
+      function showMaps() {
+        // Ensure we're on the guide page first
+        const hero = document.getElementById("hero");
+        const guide = document.getElementById("main-guide");
+        const iconGrid = document.querySelector(".icon-grid");
+        const mapContainer = document.querySelector(".map-container");
+
+        // If not on guide page, navigate there first
+        if (
+          guide.style.display === "none" ||
+          !guide.classList.contains("slide-up")
+        ) {
+          showGuide();
+          setTimeout(() => {
+            // Then show maps
+            iconGrid.style.display = "none";
+            mapContainer.style.display = "grid";
+          }, 100);
+        } else {
+          // Already on guide page, just switch to maps
+          iconGrid.style.display = "none";
+          mapContainer.style.display = "grid";
+        }
+
+        // Update active nav item
         document
           .querySelectorAll(".nav-item")
           .forEach((item) => item.classList.remove("active"));
