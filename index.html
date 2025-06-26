@@ -24,12 +24,48 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        /* Remove default mobile tap highlights */
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* Remove focus outlines but keep for keyboard navigation */
+      button,
+      .nav-item,
+      .icon-box,
+      .hero-start-btn,
+      .back-button,
+      input[type="search"],
+      a {
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-focus-ring-color: transparent !important;
+        border: none;
+      }
+
+      /* Re-enable focus for keyboard users */
+      button:focus-visible,
+      .nav-item:focus-visible,
+      .icon-box:focus-visible,
+      .hero-start-btn:focus-visible,
+      .back-button:focus-visible {
+        outline: 2px solid #ff5a5f !important;
+        outline-offset: 2px !important;
       }
       body,
       html {
         height: 100%;
         font-family: "Montserrat", Arial, sans-serif;
         background: var(--bg);
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
       }
       #hero {
         position: fixed;
@@ -244,6 +280,11 @@
         cursor: pointer;
         animation: fadeInUp 1s ease-out 1.9s both;
         padding: 0;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        outline: none !important;
       }
 
       .start-button-container {
@@ -467,6 +508,8 @@
         padding: 0.4em 1em;
         font-size: 1em;
         margin-left: 1em;
+        -webkit-tap-highlight-color: transparent !important;
+        outline: none !important;
       }
       .icon-grid {
         display: grid;
@@ -501,6 +544,11 @@
         border-radius: 12px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        outline: none !important;
       }
 
       .icon-box::before {
@@ -609,6 +657,12 @@
         border-radius: 12px !important;
         position: relative !important;
         overflow: hidden !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        outline: none !important;
+        border: none !important;
       }
 
       .nav-item::before {
@@ -718,6 +772,7 @@
           transform: translateY(100%);
           transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           position: relative;
+          overscroll-behavior: none;
         }
         .popup-container.animate-in {
           transform: translateY(0);
@@ -732,13 +787,21 @@
           height: 4px;
           background: #ddd;
           border-radius: 2px;
+          z-index: 10;
         }
         .popup-header {
           padding: 1.5rem 1rem 1rem 1rem;
           border-bottom: 1px solid var(--border);
+          position: sticky;
+          top: 0;
+          background: var(--bg);
+          z-index: 5;
         }
         .popup-content {
           padding-bottom: 2rem;
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
+          max-height: calc(90vh - 120px);
         }
         .back-button {
           width: 40px;
@@ -773,6 +836,13 @@
         border-radius: 12px;
         position: relative;
         overflow: hidden;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        outline: none !important;
+        border: none !important;
+        background: none !important;
       }
 
       .back-button::before {
@@ -895,6 +965,10 @@
         overflow-y: auto;
         opacity: 0;
         transform: translateY(20px);
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        position: relative;
+        padding: 0;
       }
       .popup-content.animate-in {
         animation: popupContentSlideIn 0.6s ease-out 0.4s forwards;
@@ -947,6 +1021,27 @@
             position: fixed !important;
             z-index: 999999 !important;
           }
+        }
+      }
+
+      /* Additional mobile tap highlight fixes */
+      @media (max-width: 600px) {
+        * {
+          -webkit-tap-highlight-color: transparent !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+        }
+
+        /* Allow text selection for specific elements */
+        .hero-title,
+        .hero-host,
+        .hero-contact,
+        .hero-address,
+        .popup-content p,
+        .popup-content div {
+          -webkit-user-select: text !important;
+          user-select: text !important;
         }
       }
 
@@ -1551,11 +1646,20 @@
         const header = popup.querySelector(".popup-header");
         const content = popup.querySelector(".popup-content");
 
+        // Restore body scroll
+        document.body.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.width = "";
+
         // Remove animation classes
         popup.classList.remove("show");
         container.classList.remove("animate-in");
         header.classList.remove("animate-in");
         content.classList.remove("animate-in");
+
+        // Reset transform
+        container.style.transform = "";
+        container.style.transition = "";
 
         // Hide popup after transition
         setTimeout(() => {
@@ -1598,11 +1702,20 @@
         const header = popup.querySelector(".popup-header");
         const content = popup.querySelector(".popup-content");
 
+        // Restore body scroll
+        document.body.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.width = "";
+
         // Remove animation classes
         popup.classList.remove("show");
         container.classList.remove("animate-in");
         header.classList.remove("animate-in");
         content.classList.remove("animate-in");
+
+        // Reset transform
+        container.style.transform = "";
+        container.style.transition = "";
 
         // Hide popup after transition
         setTimeout(() => {
@@ -1614,44 +1727,81 @@
         let startY = 0;
         let currentY = 0;
         let isDragging = false;
+        let isHeader = false;
 
         // Check if mobile
         const isMobile = window.innerWidth <= 768;
         if (!isMobile) return;
 
-        container.addEventListener("touchstart", (e) => {
-          startY = e.touches[0].clientY;
-          isDragging = true;
-          container.style.transition = "none";
-        });
+        // Prevent body scroll when popup is open
+        document.body.style.overflow = "hidden";
+        document.body.style.position = "fixed";
+        document.body.style.width = "100%";
 
-        container.addEventListener("touchmove", (e) => {
+        // Get popup content area for scroll detection
+        const popupContent = container.querySelector(".popup-content");
+        const popupHeader = container.querySelector(".popup-header");
+
+        // Touch start handler
+        function handleTouchStart(e) {
+          startY = e.touches[0].clientY;
+          currentY = startY;
+          isDragging = true;
+
+          // Check if touch started on header or at top of content
+          const rect = container.getBoundingClientRect();
+          const touchY = e.touches[0].clientY - rect.top;
+          isHeader = touchY < 80; // Header area
+
+          // If touching content area, check scroll position
+          if (popupContent && !isHeader) {
+            const isAtTop = popupContent.scrollTop <= 5;
+            if (!isAtTop) {
+              isDragging = false; // Allow normal scrolling
+              return;
+            }
+          }
+
+          container.style.transition = "none";
+          e.preventDefault(); // Prevent pull-to-refresh
+        }
+
+        // Touch move handler
+        function handleTouchMove(e) {
           if (!isDragging) return;
 
           currentY = e.touches[0].clientY;
           const deltaY = currentY - startY;
 
-          // Only allow downward swipes
+          // Only allow downward swipes for closing
           if (deltaY > 0) {
-            const translateY = Math.min(deltaY, 200);
+            e.preventDefault(); // Prevent pull-to-refresh
+            e.stopPropagation();
+
+            const translateY = Math.min(deltaY * 0.8, 200); // Damping effect
             container.style.transform = `translateY(${translateY}px)`;
 
             // Adjust background opacity based on swipe distance
-            const opacity = Math.max(0.3 - deltaY / 1000, 0.1);
+            const opacity = Math.max(0.3 - deltaY / 800, 0.05);
             popup.style.background = `rgba(0, 0, 0, ${opacity})`;
+          } else {
+            // Upward swipes - prevent but don't move
+            e.preventDefault();
           }
-        });
+        }
 
-        container.addEventListener("touchend", (e) => {
+        // Touch end handler
+        function handleTouchEnd(e) {
           if (!isDragging) return;
           isDragging = false;
 
           const deltaY = currentY - startY;
           container.style.transition =
-            "transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
 
-          // If swiped down more than 100px, close popup
-          if (deltaY > 100) {
+          // If swiped down more than 80px, close popup
+          if (deltaY > 80) {
+            // Close popup
             if (popup.id === "checkin-popup") {
               closeCheckinPopup();
             } else {
@@ -1662,7 +1812,29 @@
             container.style.transform = "translateY(0)";
             popup.style.background = "rgba(0, 0, 0, 0.3)";
           }
+        }
+
+        // Add event listeners with passive: false to prevent pull-to-refresh
+        container.addEventListener("touchstart", handleTouchStart, {
+          passive: false,
         });
+        container.addEventListener("touchmove", handleTouchMove, {
+          passive: false,
+        });
+        container.addEventListener("touchend", handleTouchEnd, {
+          passive: false,
+        });
+
+        // Prevent scroll on popup backdrop
+        popup.addEventListener(
+          "touchmove",
+          (e) => {
+            if (e.target === popup) {
+              e.preventDefault();
+            }
+          },
+          { passive: false }
+        );
 
         // Close on background tap
         popup.addEventListener("click", (e) => {
