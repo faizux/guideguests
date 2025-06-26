@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Airbnb Welcome Guide for Guests</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap"
@@ -33,18 +30,6 @@
         height: 100%;
         font-family: "Montserrat", Arial, sans-serif;
         background: var(--bg);
-        -webkit-overflow-scrolling: touch;
-        position: relative;
-      }
-
-      body {
-        padding-bottom: 60px;
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
-      }
-
-      html {
-        height: -webkit-fill-available;
       }
       #hero {
         position: fixed;
@@ -411,6 +396,22 @@
         .hero-title {
           font-size: 1.3rem;
         }
+
+        /* Ensure proper viewport on Samsung and other Android devices */
+        #main-guide {
+          height: 100dvh;
+          min-height: 100dvh;
+        }
+
+        .sticky-topbar {
+          height: 70px;
+          padding: 1em;
+        }
+
+        .topbar-logo {
+          width: 40px;
+          height: 40px;
+        }
       }
       #main-guide {
         position: fixed;
@@ -424,6 +425,7 @@
         transform: translateY(100vh);
         transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         z-index: 15;
+        overflow: hidden;
       }
 
       #main-guide.slide-up {
@@ -470,9 +472,11 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.2em;
-        padding: 2em 1em 4em 1em;
+        padding: 1.5em 1em 5em 1em;
         flex: 1;
         overflow-y: auto;
+        height: calc(100vh - 140px);
+        box-sizing: border-box;
       }
       .icon-box {
         background: var(--white);
@@ -548,52 +552,25 @@
       @media (max-width: 600px) {
         .icon-grid {
           grid-template-columns: repeat(2, 1fr);
-          gap: 1em;
-          padding: 1em 0.3em 4em 0.3em;
+          gap: 0.8em;
+          padding: 1em 0.5em 7em 0.5em;
+          height: calc(100dvh - 130px);
+          max-height: calc(100dvh - 130px);
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
         }
         .icon-box {
-          padding: 1em 0.2em 0.5em 0.2em;
+          padding: 0.8em 0.3em 0.4em 0.3em;
+          min-height: 80px;
+          border-radius: 12px;
         }
-
-        /* Force bottom nav visibility on mobile */
-        .bottom-nav {
-          display: flex !important;
-          position: fixed !important;
-          bottom: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          width: 100vw !important;
-          height: 60px !important;
-          background: #ffffff !important;
-          z-index: 10000 !important;
-          border-top: 1px solid #e0e0e0 !important;
-          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-          transform: none !important;
-          -webkit-transform: none !important;
+        .icon-box i {
+          font-size: 1.5em;
+          margin-bottom: 0.3em;
         }
-
-        .nav-item {
-          display: flex !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-          color: #484848 !important;
-          padding: 8px 4px !important;
-          flex: 1 !important;
-          text-align: center !important;
-        }
-
-        .nav-item i {
-          font-size: 1.3em !important;
-          display: block !important;
-          margin-bottom: 2px !important;
-        }
-
-        .nav-item span {
-          font-size: 0.8em !important;
-          display: block !important;
-          line-height: 1 !important;
+        .icon-label {
+          font-size: 0.85em;
+          line-height: 1.2;
         }
       }
       .bottom-nav {
@@ -602,24 +579,21 @@
         right: 0 !important;
         bottom: 0 !important;
         width: 100vw !important;
-        max-width: 100% !important;
         background: #ffffff !important;
-        background-color: #ffffff !important;
         border-top: 1.5px solid #e0e0e0 !important;
         display: flex !important;
-        visibility: visible !important;
         justify-content: space-around !important;
         align-items: center !important;
         height: 60px !important;
-        min-height: 60px !important;
-        z-index: 9999 !important;
+        z-index: 99999 !important;
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
         margin: 0 !important;
         padding: 0 !important;
-        transform: translateZ(0) !important;
+        min-height: 60px !important;
+        max-height: 60px !important;
+        box-sizing: border-box !important;
         -webkit-transform: translateZ(0) !important;
-        backface-visibility: hidden !important;
-        -webkit-backface-visibility: hidden !important;
+        transform: translateZ(0) !important;
       }
       .nav-item {
         display: flex !important;
@@ -635,15 +609,6 @@
         border-radius: 12px !important;
         position: relative !important;
         overflow: hidden !important;
-        flex: 1 !important;
-        max-width: 80px !important;
-        justify-content: center !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        transform: translateZ(0) !important;
-        -webkit-transform: translateZ(0) !important;
-        backface-visibility: hidden !important;
-        -webkit-backface-visibility: hidden !important;
       }
 
       .nav-item::before {
@@ -684,18 +649,6 @@
       .nav-item i {
         font-size: 1.5em !important;
         margin-bottom: 0.1em !important;
-        display: block !important;
-        line-height: 1 !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-      }
-
-      .nav-item span {
-        display: block !important;
-        line-height: 1 !important;
-        font-size: 0.9em !important;
-        visibility: visible !important;
-        opacity: 1 !important;
       }
 
       /* Check-in Popup Styles */
@@ -964,6 +917,64 @@
         margin: 1rem;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       }
+
+      /* Samsung and Android device specific fixes */
+      @supports (height: 100dvh) {
+        #main-guide {
+          height: 100dvh !important;
+          min-height: 100dvh !important;
+        }
+
+        @media (max-width: 600px) {
+          .icon-grid {
+            height: calc(100dvh - 130px) !important;
+            max-height: calc(100dvh - 130px) !important;
+          }
+        }
+      }
+
+      /* Fallback for older browsers */
+      @supports not (height: 100dvh) {
+        @media (max-width: 600px) {
+          .icon-grid {
+            height: calc(100vh - 130px) !important;
+            max-height: calc(100vh - 130px) !important;
+            padding-bottom: 8em !important;
+          }
+
+          .bottom-nav {
+            bottom: 0 !important;
+            position: fixed !important;
+            z-index: 999999 !important;
+          }
+        }
+      }
+
+      /* Force bottom nav visibility on problematic devices */
+      @media (max-width: 600px) and (max-height: 800px) {
+        .bottom-nav {
+          position: fixed !important;
+          bottom: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100vw !important;
+          z-index: 999999 !important;
+          background: #ffffff !important;
+          border-top: 1.5px solid #e0e0e0 !important;
+          display: flex !important;
+          height: 60px !important;
+          min-height: 60px !important;
+          max-height: 60px !important;
+          box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+          justify-content: space-around !important;
+          align-items: center !important;
+        }
+
+        .icon-grid {
+          padding-bottom: 8em !important;
+          margin-bottom: 0 !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1058,75 +1069,17 @@
           <div class="icon-label">More Info</div>
         </div>
       </div>
-      <nav
-        class="bottom-nav"
-        style="
-          display: flex !important;
-          position: fixed !important;
-          bottom: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          width: 100vw !important;
-          background: #ffffff !important;
-          z-index: 10000 !important;
-          height: 60px !important;
-        "
-      >
-        <div
-          class="nav-item active"
-          onclick="goHome()"
-          style="
-            display: flex !important;
-            visibility: visible !important;
-            flex-direction: column !important;
-            align-items: center !important;
-          "
-        >
-          <i
-            class="fas fa-home"
-            style="display: block !important; font-size: 1.5em !important"
-          ></i>
-          <span style="display: block !important; font-size: 0.9em !important"
-            >Home</span
-          >
+      <div class="bottom-nav">
+        <div class="nav-item active" onclick="goHome()">
+          <i class="fas fa-home"></i>Home
         </div>
-        <div
-          class="nav-item"
-          onclick="goToGuide()"
-          style="
-            display: flex !important;
-            visibility: visible !important;
-            flex-direction: column !important;
-            align-items: center !important;
-          "
-        >
-          <i
-            class="fas fa-book"
-            style="display: block !important; font-size: 1.5em !important"
-          ></i>
-          <span style="display: block !important; font-size: 0.9em !important"
-            >Guide</span
-          >
+        <div class="nav-item" onclick="goToGuide()">
+          <i class="fas fa-book"></i>Guide
         </div>
-        <div
-          class="nav-item"
-          onclick="showHostPopup()"
-          style="
-            display: flex !important;
-            visibility: visible !important;
-            flex-direction: column !important;
-            align-items: center !important;
-          "
-        >
-          <i
-            class="fas fa-user"
-            style="display: block !important; font-size: 1.5em !important"
-          ></i>
-          <span style="display: block !important; font-size: 0.9em !important"
-            >About Host</span
-          >
+        <div class="nav-item" onclick="showHostPopup()">
+          <i class="fas fa-user"></i>About Host
         </div>
-      </nav>
+      </div>
     </div>
 
     <!-- Check-in Popup -->
@@ -1722,6 +1675,56 @@
           }
         });
       }
+
+      // Force bottom navigation visibility on mobile devices
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.innerWidth <= 600) {
+          const bottomNav = document.querySelector(".bottom-nav");
+          if (bottomNav) {
+            // Force visibility
+            bottomNav.style.display = "flex";
+            bottomNav.style.visibility = "visible";
+            bottomNav.style.opacity = "1";
+            bottomNav.style.position = "fixed";
+            bottomNav.style.bottom = "0";
+            bottomNav.style.left = "0";
+            bottomNav.style.right = "0";
+            bottomNav.style.zIndex = "999999";
+            bottomNav.style.width = "100vw";
+            bottomNav.style.height = "60px";
+            bottomNav.style.backgroundColor = "#ffffff";
+            bottomNav.style.borderTop = "1.5px solid #e0e0e0";
+            bottomNav.style.boxShadow = "0 -2px 10px rgba(0, 0, 0, 0.1)";
+
+            // Ensure it's always on top
+            setTimeout(() => {
+              bottomNav.style.transform = "translateZ(0)";
+            }, 100);
+          }
+        }
+      });
+
+      // Handle orientation changes on mobile
+      window.addEventListener("orientationchange", () => {
+        setTimeout(() => {
+          if (window.innerWidth <= 600) {
+            const bottomNav = document.querySelector(".bottom-nav");
+            const iconGrid = document.querySelector(".icon-grid");
+
+            if (bottomNav) {
+              bottomNav.style.display = "flex";
+              bottomNav.style.position = "fixed";
+              bottomNav.style.bottom = "0";
+              bottomNav.style.zIndex = "999999";
+            }
+
+            if (iconGrid) {
+              iconGrid.style.paddingBottom = "7em";
+              iconGrid.style.height = "calc(100vh - 130px)";
+            }
+          }
+        }, 200);
+      });
     </script>
   </body>
 </html>
